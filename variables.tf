@@ -8,3 +8,7 @@ variable "statics_file" {
   type    = string
   default = null
 }
+variable "comment" {
+  type    = string
+  default = null
+}

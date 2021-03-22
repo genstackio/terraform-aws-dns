@@ -1,7 +1,9 @@
 module "dns" {
-  source = "../.."
-  zone   = var.domain
-  name   = "Alternate domain to ${var.target}"
+  source       = "../.."
+  zone         = var.domain
+  name         = "alternate"
+  comment      = "Alternate domain to ${var.target}"
+  statics_file = var.statics_file
 }
 
 module "dns-google" {
