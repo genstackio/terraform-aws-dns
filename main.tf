@@ -13,13 +13,13 @@ resource "aws_route53_record" "statics" {
   zone_id  = aws_route53_zone.zone.id
   name     = each.value.name
   type     = "ALIAS" == each.value.type ? "A" : each.value.type
-  ttl      = each.value.ttl
+  ttl      = "ALIAS" == each.value.type ? null : each.value.ttl
   records  = "ALIAS" == each.value.type ? null : split(";;;", each.value.value)
   dynamic "alias" {
     for_each = "ALIAS" == each.value.type ? { k: 1} : {}
     content {
-        name                   = split(":", each.value.value)[0]
-        zone_id                = split(":", each.value.value)[1]
+        name                   = strcontains(each.value.value, ":") ? split(":", each.value.value)[0] : each.value.value
+        zone_id                = strcontains(each.value.value, ":") ? split(":", each.value.value)[1] : "Z2FDTNDATAQYW2"
         evaluate_target_health = false
     }
   }
