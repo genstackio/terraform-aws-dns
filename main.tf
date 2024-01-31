@@ -17,8 +17,10 @@ resource "aws_route53_record" "statics" {
   records  = "ALIAS" == each.value.type ? null : split(";;;", each.value.value)
   dynamic "alias" {
     for_each = "ALIAS" == each.value.type ? { k: 1} : {}
-    name                   = split(":", each.value.value)[0]
-    zone_id                = split(":", each.value.value)[1]
-    evaluate_target_health = false
+    content {
+        name                   = split(":", each.value.value)[0]
+        zone_id                = split(":", each.value.value)[1]
+        evaluate_target_health = false
+    }
   }
 }
