@@ -18,8 +18,8 @@ resource "aws_route53_record" "statics" {
   dynamic "alias" {
     for_each = "ALIAS" == each.value.type ? { k: 1} : {}
     content {
-        name                   = strcontains(each.value.value, ":") ? split(":", each.value.value)[0] : each.value.value
-        zone_id                = strcontains(each.value.value, ":") ? split(":", each.value.value)[1] : "Z2FDTNDATAQYW2"
+        name                   = length(split(":", each.value.value)) > 1 ? split(":", each.value.value)[0] : each.value.value
+        zone_id                = length(split(":", each.value.value)) > 1 ? split(":", each.value.value)[1] : "Z2FDTNDATAQYW2"
         evaluate_target_health = false
     }
   }
