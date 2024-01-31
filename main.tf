@@ -12,7 +12,13 @@ resource "aws_route53_record" "statics" {
   for_each = { for record_name, record in local.entries : record_name => record if((record.env == null) || (record.env == var.name) || (record.env == "*")) }
   zone_id  = aws_route53_zone.zone.id
   name     = each.value.name
-  type     = each.value.type
+  type     = "ALIAS" == each.value.type ? "A" : each.value.type
   ttl      = each.value.ttl
-  records  = split(";;;", each.value.value)
+  records  = "ALIAS" == each.value.type ? null : split(";;;", each.value.value)
+  dynamic "alias" {
+    for_each = "ALIAS" == each.value.type ? { k: 1} : {}
+    name                   = split(":", each.value.value)[0]
+    zone_id                = split(":", each.value.value)[1]
+    evaluate_target_health = false
+  }
 }
