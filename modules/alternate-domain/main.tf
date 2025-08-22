@@ -18,7 +18,7 @@ resource "aws_route53_record" "apex" {
   type    = "A"
 
   alias {
-    name                   = aws_s3_bucket.alternate.website_domain
+    name                   = aws_s3_bucket_website_configuration.alternate.website_domain
     zone_id                = aws_s3_bucket.alternate.hosted_zone_id
     evaluate_target_health = false
   }
@@ -28,7 +28,7 @@ resource "aws_route53_record" "www" {
   name    = "www.${var.domain}"
   type    = "A"
   alias {
-    name                   = aws_s3_bucket.alternate-www.website_domain
+    name                   = aws_s3_bucket_website_configuration.alternate-www.website_domain
     zone_id                = aws_s3_bucket.alternate-www.hosted_zone_id
     evaluate_target_health = false
   }
