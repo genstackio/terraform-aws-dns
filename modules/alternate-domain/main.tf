@@ -36,13 +36,19 @@ resource "aws_route53_record" "www" {
 
 resource "aws_s3_bucket" "alternate" {
   bucket = var.domain
-  website {
-    redirect_all_requests_to = var.target
+}
+resource "aws_s3_bucket_website_configuration" "alternate" {
+  bucket = aws_s3_bucket.alternate.id
+  redirect_all_requests_to {
+    host_name = var.target
   }
 }
 resource "aws_s3_bucket" "alternate-www" {
   bucket = "www.${var.domain}"
-  website {
-    redirect_all_requests_to = var.target
+}
+resource "aws_s3_bucket_website_configuration" "alternate-www" {
+  bucket = aws_s3_bucket.alternate-www.id
+  redirect_all_requests_to {
+    host_name = var.target
   }
 }
